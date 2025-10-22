@@ -1,0 +1,314 @@
+{
+  "globalRules": {
+    "hardLimits": {
+      "24h": {
+        "maxEmails": 1,
+        "action": "block",
+        "message": "Hard limit: Maximum 1 email per 24 hours already sent",
+        "priority": 1
+      },
+      "7d": {
+        "maxEmails": 3,
+        "action": "block",
+        "message": "Hard limit: Maximum 3 emails per 7 days already sent",
+        "priority": 2
+      },
+      "30d": {
+        "maxEmails": 10,
+        "action": "block",
+        "message": "Hard limit: Maximum 10 emails per 30 days already sent",
+        "priority": 3
+      }
+    },
+    "warningLimits": {
+      "7d": {
+        "maxEmails": 2,
+        "action": "warn",
+        "message": "Warning: Approaching 7-day limit (2/3 emails sent)",
+        "priority": 4
+      },
+      "30d": {
+        "maxEmails": 8,
+        "action": "warn",
+        "message": "Warning: Approaching 30-day limit (8/10 emails sent)",
+        "priority": 5
+      }
+    },
+    "softLimits": {
+      "30d": {
+        "maxEmails": 10,
+        "action": "log",
+        "message": "Info: 30-day soft limit tracked",
+        "priority": 6
+      }
+    }
+  },
+  "leadStatusRules": {
+    "hot": {
+      "leadScoreMin": 8,
+      "leadScoreMax": 10,
+      "adjustments": {
+        "24h": {
+          "maxEmails": 1,
+          "note": "Hot leads: No change to 24h limit"
+        },
+        "7d": {
+          "maxEmails": 4,
+          "note": "Hot leads: Increased from 3 to 4 per week"
+        },
+        "30d": {
+          "maxEmails": 12,
+          "note": "Hot leads: Increased from 10 to 12 per month"
+        }
+      },
+      "minDaysBetweenEmails": 1
+    },
+    "warm": {
+      "leadScoreMin": 5,
+      "leadScoreMax": 7,
+      "adjustments": {
+        "24h": {
+          "maxEmails": 1,
+          "note": "Warm leads: Standard limits"
+        },
+        "7d": {
+          "maxEmails": 3,
+          "note": "Warm leads: Standard limits"
+        },
+        "30d": {
+          "maxEmails": 10,
+          "note": "Warm leads: Standard limits"
+        }
+      },
+      "minDaysBetweenEmails": 2
+    },
+    "cold": {
+      "leadScoreMin": 1,
+      "leadScoreMax": 4,
+      "adjustments": {
+        "24h": {
+          "maxEmails": 1,
+          "note": "Cold leads: No change to 24h limit"
+        },
+        "7d": {
+          "maxEmails": 2,
+          "note": "Cold leads: Reduced from 3 to 2 per week"
+        },
+        "30d": {
+          "maxEmails": 6,
+          "note": "Cold leads: Reduced from 10 to 6 per month"
+        }
+      },
+      "minDaysBetweenEmails": 5
+    },
+    "inactive": {
+      "leadScoreMin": 0,
+      "leadScoreMax": 0,
+      "adjustments": {
+        "24h": {
+          "maxEmails": 0,
+          "note": "Inactive leads: No emails allowed"
+        },
+        "7d": {
+          "maxEmails": 0,
+          "note": "Inactive leads: No emails allowed"
+        },
+        "30d": {
+          "maxEmails": 0,
+          "note": "Inactive leads: No emails allowed"
+        }
+      },
+      "minDaysBetweenEmails": 999
+    }
+  },
+  "engagementRules": {
+    "highEngagement": {
+      "engagementScoreMin": 80,
+      "adjustments": {
+        "multiplier": 1.2,
+        "note": "High engagement: 20% increase in frequency allowed"
+      },
+      "autoOptIn": true
+    },
+    "mediumEngagement": {
+      "engagementScoreMin": 50,
+      "engagementScoreMax": 79,
+      "adjustments": {
+        "multiplier": 1.0,
+        "note": "Medium engagement: Standard frequency"
+      },
+      "autoOptIn": false
+    },
+    "lowEngagement": {
+      "engagementScoreMin": 20,
+      "engagementScoreMax": 49,
+      "adjustments": {
+        "multiplier": 0.8,
+        "note": "Low engagement: 20% decrease in frequency"
+      },
+      "autoOptIn": false
+    },
+    "noEngagement": {
+      "engagementScoreMin": 0,
+      "engagementScoreMax": 19,
+      "adjustments": {
+        "multiplier": 0.5,
+        "note": "No engagement: 50% decrease in frequency"
+      },
+      "autoOptIn": false,
+      "pauseAfterDays": 30
+    }
+  },
+  "brandSpecificRules": {
+    "perBrandTracking": true,
+    "crossBrandSharing": false,
+    "note": "Each brand's frequency is tracked independently",
+    "exceptions": {
+      "allowMultipleBrandsPerDay": true,
+      "maxBrandsPerDay": 2,
+      "note": "Contact can receive from max 2 different brands per day"
+    }
+  },
+  "campaignTypeRules": {
+    "transactional": {
+      "exemptFromLimits": true,
+      "examples": ["payment confirmation", "appointment reminder", "document request"],
+      "note": "Transactional emails bypass frequency limits"
+    },
+    "promotional": {
+      "exemptFromLimits": false,
+      "appliesStrictLimits": true,
+      "note": "Promotional emails follow strict frequency rules"
+    },
+    "educational": {
+      "exemptFromLimits": false,
+      "adjustments": {
+        "multiplier": 1.1,
+        "note": "Educational content: 10% more lenient"
+      }
+    },
+    "followUp": {
+      "exemptFromLimits": false,
+      "requiresPreviousEngagement": true,
+      "minEngagementScore": 30,
+      "note": "Follow-ups require previous engagement"
+    }
+  },
+  "timingRules": {
+    "optimalSendTimes": {
+      "enabled": true,
+      "learnFromEngagement": true,
+      "defaultWindows": [
+        {
+          "dayOfWeek": "Tuesday",
+          "startHour": 10,
+          "endHour": 14,
+          "timezone": "America/New_York",
+          "score": 95
+        },
+        {
+          "dayOfWeek": "Wednesday",
+          "startHour": 10,
+          "endHour": 14,
+          "timezone": "America/New_York",
+          "score": 95
+        },
+        {
+          "dayOfWeek": "Thursday",
+          "startHour": 10,
+          "endHour": 14,
+          "timezone": "America/New_York",
+          "score": 90
+        }
+      ],
+      "avoidWindows": [
+        {
+          "dayOfWeek": "Saturday",
+          "allDay": true,
+          "reason": "Weekend - low engagement"
+        },
+        {
+          "dayOfWeek": "Sunday",
+          "allDay": true,
+          "reason": "Weekend - low engagement"
+        },
+        {
+          "startHour": 0,
+          "endHour": 7,
+          "reason": "Early morning - avoid"
+        },
+        {
+          "startHour": 22,
+          "endHour": 23,
+          "reason": "Late night - avoid"
+        }
+      ]
+    },
+    "respectTimezones": true,
+    "defaultTimezone": "America/New_York"
+  },
+  "optOutRules": {
+    "respectOptOut": true,
+    "optOutTypes": {
+      "global": {
+        "blocksAllEmails": true,
+        "note": "Global opt-out blocks all brands"
+      },
+      "brandSpecific": {
+        "blocksAllEmails": false,
+        "blocksBrandOnly": true,
+        "note": "Brand opt-out blocks specific brand only"
+      },
+      "categorySpecific": {
+        "blocksAllEmails": false,
+        "blocksCategory": true,
+        "note": "Category opt-out blocks specific content types"
+      }
+    },
+    "autoOptOutAfterBounces": {
+      "enabled": true,
+      "hardBounceThreshold": 1,
+      "softBounceThreshold": 3
+    }
+  },
+  "validationChecks": {
+    "preQueueChecks": [
+      "optOutStatus",
+      "emailValidity",
+      "frequencyLimits",
+      "brandAssociation",
+      "leadStatus",
+      "engagementScore"
+    ],
+    "preSendChecks": [
+      "optOutStatus",
+      "frequencyLimitsRecheck",
+      "emailValidity",
+      "workspaceLimit"
+    ],
+    "postSendActions": [
+      "updateSendHistory",
+      "incrementCounters",
+      "updateEngagementScore",
+      "logToAudit"
+    ]
+  },
+  "autoPilotRules": {
+    "enabled": true,
+    "minLeadScore": 7,
+    "minEngagementScore": 40,
+    "minDaysSinceContact": 7,
+    "maxDaysSinceContact": 30,
+    "respectFrequencyLimits": true,
+    "useStricterLimits": true,
+    "stricterMultiplier": 0.8,
+    "note": "Auto-pilot uses 20% stricter frequency limits than manual campaigns"
+  },
+  "emergencyOverrides": {
+    "allowManualOverride": true,
+    "requiresApproval": true,
+    "approverRoles": ["admin", "campaign_manager"],
+    "logAllOverrides": true,
+    "reasonRequired": true
+  }
+}

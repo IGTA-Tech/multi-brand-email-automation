@@ -1,0 +1,39 @@
+{
+  "sorted_middleware": [
+    "/api/claude/route"
+  ],
+  "middleware": {},
+  "instrumentation": null,
+  "functions": {
+    "/api/claude/route": {
+      "files": [
+        "server/middleware-build-manifest.js",
+        "server/interception-route-rewrite-manifest.js",
+        "server/server-reference-manifest.js",
+        "server/app/api/claude/route_client-reference-manifest.js",
+        "server/edge/chunks/_next-internal_server_app_api_claude_route_actions_c275cbc4.js",
+        "server/edge/chunks/turbopack-_next-internal_server_app_api_claude_route_actions_d1c410d4.js",
+        "server/edge/chunks/_2ee703a3._.js",
+        "server/edge/chunks/[root-of-the-server]__7e2f1923._.js",
+        "server/edge/chunks/turbopack-edge-wrapper_d26864b2.js"
+      ],
+      "name": "app/api/claude/route",
+      "page": "/api/claude/route",
+      "matchers": [
+        {
+          "regexp": "^/api/claude(?:/)?$",
+          "originalSource": "/api/claude"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "sv9I6t5s7H1bpj6oS8Fej",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "NIWEl6V8CQI7R9Kez+6uj3Xg3I5kJOgXnrSGmj2qjFE=",
+        "__NEXT_PREVIEW_MODE_ID": "67d6eb633e84cd7731cc0e7dfc4f6e21",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "64a3dfb1435ace52eeca37cf0ed5739808a60484290483f899b041bf2cbf4799",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "70b1701301ddcab69ad5fd82920925dfe87d1574e2089d5dffb59f40f19f22d1"
+      }
+    }
+  }
+}
