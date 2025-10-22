@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "/page": [
+      "static/chunks/060f9a97930f3d04.js",
+      "static/chunks/6b21c2746c94af1d.css",
+      "static/chunks/61c72abfeb128870.js",
+      "static/chunks/49ceccd882f0d4ec.js",
+      "static/chunks/34c4658583b69a91.js",
+      "static/chunks/e9173429ac19f9e8.js",
+      "static/chunks/turbopack-8b0b562ba8dc2d66.js"
+    ]
+  }
+}

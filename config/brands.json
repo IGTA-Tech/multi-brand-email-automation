@@ -1,0 +1,187 @@
+{
+  "brands": [
+    {
+      "id": "sherrod-sports-visas",
+      "name": "Sherrod Sports Visas",
+      "email": "contact@sherrodsportsvisas.com",
+      "fromName": "Sherrod Sports Visas",
+      "replyTo": "support@sherrodsportsvisas.com",
+      "workspace": "workspace-sherrod",
+      "voiceGuidelines": {
+        "tone": "Professional, authoritative, and sports-focused",
+        "style": "Direct and action-oriented with sports industry expertise",
+        "personality": "Expert consultant who understands the unique challenges of athlete visas",
+        "keyPhrases": [
+          "sports visa expertise",
+          "athlete immigration",
+          "fast-track processing",
+          "proven track record"
+        ],
+        "avoidPhrases": [
+          "maybe",
+          "hopefully",
+          "try",
+          "might"
+        ]
+      },
+      "signature": "Best regards,\n\nSherrod Sports Visas Team\nwww.sherrodsportsvisas.com\nPhone: +1 (555) 123-4567",
+      "dailyLimit": 500,
+      "hourlyLimit": 50,
+      "enabled": true,
+      "tags": ["sports", "visas", "O1", "P1"],
+      "defaultTemplate": "sports-intro-v1",
+      "customFields": {
+        "paymentLink": "https://sherrodsportsvisas.com/payment",
+        "streamyardLink": "https://streamyard.com/sherrod",
+        "calendlyLink": "https://calendly.com/sherrod-sports"
+      }
+    },
+    {
+      "id": "innovative-global-talent",
+      "name": "Innovative Global Talent",
+      "email": "hello@innovativeglobaltalent.com",
+      "fromName": "Innovative Global Talent",
+      "replyTo": "support@innovativeglobaltalent.com",
+      "workspace": "workspace-igt",
+      "voiceGuidelines": {
+        "tone": "Innovative, forward-thinking, and encouraging",
+        "style": "Conversational yet professional with emphasis on innovation",
+        "personality": "Strategic partner who sees the bigger picture of global talent mobility",
+        "keyPhrases": [
+          "global talent solutions",
+          "innovative immigration strategies",
+          "strategic workforce planning",
+          "talent mobility"
+        ],
+        "avoidPhrases": [
+          "traditional approach",
+          "standard process",
+          "typical timeline"
+        ]
+      },
+      "signature": "Warm regards,\n\nInnovative Global Talent Team\nwww.innovativeglobaltalent.com\nPhone: +1 (555) 234-5678",
+      "dailyLimit": 400,
+      "hourlyLimit": 40,
+      "enabled": true,
+      "tags": ["tech", "innovation", "global", "EB1", "EB2"],
+      "defaultTemplate": "igt-intro-v1",
+      "customFields": {
+        "paymentLink": "https://innovativeglobaltalent.com/payment",
+        "consultationLink": "https://calendly.com/igt-consultation",
+        "resourcesLink": "https://innovativeglobaltalent.com/resources"
+      }
+    },
+    {
+      "id": "aventus-visa-agents",
+      "name": "Aventus Visa Agents",
+      "email": "info@aventusvisaagents.com",
+      "fromName": "Aventus Visa Agents",
+      "replyTo": "support@aventusvisaagents.com",
+      "workspace": "workspace-aventus",
+      "voiceGuidelines": {
+        "tone": "Reliable, detail-oriented, and reassuring",
+        "style": "Clear and methodical with emphasis on precision",
+        "personality": "Trusted advisor who handles complex cases with care and attention to detail",
+        "keyPhrases": [
+          "meticulous attention to detail",
+          "comprehensive case management",
+          "proven success rate",
+          "personalized service"
+        ],
+        "avoidPhrases": [
+          "quick fix",
+          "easy process",
+          "guaranteed approval"
+        ]
+      },
+      "signature": "Sincerely,\n\nAventus Visa Agents Team\nwww.aventusvisaagents.com\nPhone: +1 (555) 345-6789",
+      "dailyLimit": 300,
+      "hourlyLimit": 30,
+      "enabled": true,
+      "tags": ["business", "investment", "family", "E2", "L1"],
+      "defaultTemplate": "aventus-intro-v1",
+      "customFields": {
+        "paymentLink": "https://aventusvisaagents.com/payment",
+        "casePortalLink": "https://portal.aventusvisaagents.com",
+        "schedulingLink": "https://calendly.com/aventus"
+      }
+    },
+    {
+      "id": "camino-immigration",
+      "name": "Camino Immigration",
+      "email": "contact@caminoimmigration.com",
+      "fromName": "Camino Immigration",
+      "replyTo": "support@caminoimmigration.com",
+      "workspace": "workspace-camino",
+      "voiceGuidelines": {
+        "tone": "Compassionate, supportive, and empowering",
+        "style": "Warm and personal with emphasis on the human journey",
+        "personality": "Caring guide who walks alongside clients through their immigration journey",
+        "keyPhrases": [
+          "your immigration journey",
+          "every step of the way",
+          "personalized guidance",
+          "your American dream"
+        ],
+        "avoidPhrases": [
+          "complicated process",
+          "difficult situation",
+          "uphill battle"
+        ]
+      },
+      "signature": "With care,\n\nCamino Immigration Team\nwww.caminoimmigration.com\nPhone: +1 (555) 456-7890",
+      "dailyLimit": 350,
+      "hourlyLimit": 35,
+      "enabled": true,
+      "tags": ["family", "humanitarian", "citizenship", "green-card"],
+      "defaultTemplate": "camino-intro-v1",
+      "customFields": {
+        "paymentLink": "https://caminoimmigration.com/payment",
+        "intakeFormLink": "https://forms.caminoimmigration.com/intake",
+        "appointmentLink": "https://calendly.com/camino-immigration"
+      }
+    }
+  ],
+  "workspaces": [
+    {
+      "id": "workspace-sherrod",
+      "name": "Sherrod Sports Workspace",
+      "gmailAccount": "contact@sherrodsportsvisas.com",
+      "sendingDomain": "sherrodsportsvisas.com",
+      "dailyLimit": 500,
+      "spfRecord": "v=spf1 include:_spf.google.com ~all",
+      "dkimSelector": "google",
+      "dmarcPolicy": "p=quarantine"
+    },
+    {
+      "id": "workspace-igt",
+      "name": "IGT Workspace",
+      "gmailAccount": "hello@innovativeglobaltalent.com",
+      "sendingDomain": "innovativeglobaltalent.com",
+      "dailyLimit": 400,
+      "spfRecord": "v=spf1 include:_spf.google.com ~all",
+      "dkimSelector": "google",
+      "dmarcPolicy": "p=quarantine"
+    },
+    {
+      "id": "workspace-aventus",
+      "name": "Aventus Workspace",
+      "gmailAccount": "info@aventusvisaagents.com",
+      "sendingDomain": "aventusvisaagents.com",
+      "dailyLimit": 300,
+      "spfRecord": "v=spf1 include:_spf.google.com ~all",
+      "dkimSelector": "google",
+      "dmarcPolicy": "p=quarantine"
+    },
+    {
+      "id": "workspace-camino",
+      "name": "Camino Workspace",
+      "gmailAccount": "contact@caminoimmigration.com",
+      "sendingDomain": "caminoimmigration.com",
+      "dailyLimit": 350,
+      "spfRecord": "v=spf1 include:_spf.google.com ~all",
+      "dkimSelector": "google",
+      "dmarcPolicy": "p=quarantine"
+    }
+  ]
+}

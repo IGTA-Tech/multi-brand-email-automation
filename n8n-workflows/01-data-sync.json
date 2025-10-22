@@ -1,0 +1,397 @@
+{
+  "name": "WF1: Data Sync (Google Sheets ↔ Airtable)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "sync-trigger",
+      "name": "Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "syncStartTime",
+              "value": "={{$now.toISO()}}"
+            },
+            {
+              "name": "syncId",
+              "value": "=SYNC-{{$now.toFormat('yyyyMMdd-HHmmss')}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-timestamp",
+      "name": "Set Sync Timestamp",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$env.GOOGLE_SPREADSHEET_ID}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Ultimate Contact Sheet",
+          "mode": "list"
+        },
+        "options": {
+          "range": "A2:AZ"
+        }
+      },
+      "id": "read-contacts",
+      "name": "Read Contacts from Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [650, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "1",
+          "name": "Google Sheets OAuth2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter contacts modified since last sync\nconst lastSyncTime = $('Get Last Sync Time').first().json.lastSync;\nconst items = $input.all();\n\nconst updatedContacts = items.filter(item => {\n  const modifiedDate = new Date(item.json['Last Modified']);\n  const lastSync = new Date(lastSyncTime);\n  return modifiedDate > lastSync;\n});\n\nreturn updatedContacts;"
+      },
+      "id": "filter-updated",
+      "name": "Filter Updated Contacts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "batchSize": 50,
+        "options": {}
+      },
+      "id": "split-batch",
+      "name": "Split Into Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "baseId": {
+          "__rl": true,
+          "value": "={{$env.AIRTABLE_BASE_ID}}",
+          "mode": "id"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "Contacts",
+          "mode": "list"
+        },
+        "options": {
+          "filterByFormula": "={Contact ID} = \"{{$json['Contact ID']}}\""
+        }
+      },
+      "id": "check-exists",
+      "name": "Check if Contact Exists in Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2,
+      "position": [1250, 300],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "2",
+          "name": "Airtable Personal Access Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$node['Check if Contact Exists in Airtable'].json.records.length}}",
+              "operation": "largerEqual",
+              "value2": "1"
+            }
+          ]
+        }
+      },
+      "id": "if-exists",
+      "name": "Contact Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "baseId": {
+          "__rl": true,
+          "value": "={{$env.AIRTABLE_BASE_ID}}",
+          "mode": "id"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "Contacts",
+          "mode": "list"
+        },
+        "id": "={{$node['Check if Contact Exists in Airtable'].json.records[0].id}}",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "First Name",
+              "fieldValue": "={{$json['First Name']}}"
+            },
+            {
+              "fieldId": "Last Name",
+              "fieldValue": "={{$json['Last Name']}}"
+            },
+            {
+              "fieldId": "Email",
+              "fieldValue": "={{$json['Email']}}"
+            },
+            {
+              "fieldId": "Lead Status",
+              "fieldValue": "={{$json['Lead Status']}}"
+            },
+            {
+              "fieldId": "Lead Score",
+              "fieldValue": "={{$json['Lead Score']}}"
+            }
+          ]
+        }
+      },
+      "id": "update-contact",
+      "name": "Update Contact",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2,
+      "position": [1650, 200],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "2",
+          "name": "Airtable Personal Access Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "baseId": {
+          "__rl": true,
+          "value": "={{$env.AIRTABLE_BASE_ID}}",
+          "mode": "id"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "Contacts",
+          "mode": "list"
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Contact ID",
+              "fieldValue": "={{$json['Contact ID']}}"
+            },
+            {
+              "fieldId": "First Name",
+              "fieldValue": "={{$json['First Name']}}"
+            },
+            {
+              "fieldId": "Last Name",
+              "fieldValue": "={{$json['Last Name']}}"
+            },
+            {
+              "fieldId": "Email",
+              "fieldValue": "={{$json['Email']}}"
+            },
+            {
+              "fieldId": "Lead Status",
+              "fieldValue": "={{$json['Lead Status']}}"
+            },
+            {
+              "fieldId": "Lead Score",
+              "fieldValue": "={{$json['Lead Score']}}"
+            }
+          ]
+        }
+      },
+      "id": "create-contact",
+      "name": "Create Contact",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2,
+      "position": [1650, 400],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "2",
+          "name": "Airtable Personal Access Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "mergeByPosition"
+      },
+      "id": "merge-branches",
+      "name": "Merge Branches",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [1850, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst results = {\n  syncId: $('Set Sync Timestamp').first().json.syncId,\n  totalProcessed: items.length,\n  updated: items.filter(i => i.json.operation === 'update').length,\n  created: items.filter(i => i.json.operation === 'create').length,\n  errors: items.filter(i => i.json.error).length,\n  completedAt: new Date().toISOString()\n};\n\nconsole.log('Sync Results:', results);\n\nreturn [{ json: results }];"
+      },
+      "id": "log-results",
+      "name": "Log Sync Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2050, 300]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Set Sync Timestamp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Sync Timestamp": {
+      "main": [
+        [
+          {
+            "node": "Read Contacts from Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Contacts from Sheets": {
+      "main": [
+        [
+          {
+            "node": "Filter Updated Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Updated Contacts": {
+      "main": [
+        [
+          {
+            "node": "Split Into Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Into Batches": {
+      "main": [
+        [
+          {
+            "node": "Check if Contact Exists in Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Contact Exists in Airtable": {
+      "main": [
+        [
+          {
+            "node": "Contact Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Exists?": {
+      "main": [
+        [
+          {
+            "node": "Update Contact",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Contact": {
+      "main": [
+        [
+          {
+            "node": "Merge Branches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Contact": {
+      "main": [
+        [
+          {
+            "node": "Merge Branches",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Branches": {
+      "main": [
+        [
+          {
+            "node": "Log Sync Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "instanceId": "your-instance-id"
+  },
+  "id": "wf1-data-sync",
+  "tags": []
+}
